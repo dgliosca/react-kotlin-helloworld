@@ -13,4 +13,10 @@ To run it:
 ```sh
 ./gradlew run
 ```
+
+To stop it:
+```sh
+./gradlew stop
+```
+
 Open [http://localhost:7777/](http://localhost:7777/) to view it in the browser.<br>
