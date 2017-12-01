@@ -1,0 +1,16 @@
+# Gradle
+.gradle/
+target/
+
+# IntelliJ IDEA
+.idea/*
+!.idea/runConfigurations/
+!.idea/codeStyleSettings.xml
+out/
+
+# Virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+logs/
+*.pid
+*.DS_Store

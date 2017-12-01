@@ -1,0 +1,79 @@
+buildscript {
+    ext.kotlin_version = '1.2.0'
+    ext.react_version = "16.0.0"
+
+    ext.kotlin_react_version = "$react_version-pre.13-kotlin-1.2.0"
+    ext.kotlin_react_dom_version = "$react_version-pre.13-kotlin-1.2.0"
+
+    repositories {
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.moowork.gradle:gradle-node-plugin:1.2.0"
+        classpath "org.jetbrains.kotlin:kotlin-frontend-plugin:0.0.23"
+    }
+}
+
+group 'react-kotlin-helloworld'
+version '1.0-SNAPSHOT'
+
+apply plugin: "kotlin2js"
+apply plugin: "kotlin-dce-js"
+apply plugin: "com.moowork.node"
+apply plugin: 'org.jetbrains.kotlin.frontend'
+
+node {
+    download = true
+}
+
+repositories {
+    mavenCentral()
+    maven { url "https://dl.bintray.com/kotlin/kotlin-js-wrappers" }
+    maven { url "http://dl.bintray.com/kotlinx/kotlinx" }
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
+    compile "org.jetbrains:kotlin-react:$kotlin_react_version"
+    compile "org.jetbrains:kotlin-react-dom:$kotlin_react_dom_version"
+    testCompile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
+}
+
+compileKotlin2Js {
+    kotlinOptions {
+        metaInfo = true
+        outputFile = "$project.buildDir.path/js/${project.name}.js"
+        sourceMap = true
+        moduleKind = 'commonjs'
+        main = "call"
+    }
+}
+
+compileTestKotlin2Js {
+    kotlinOptions {
+        metaInfo = true
+        outputFile = "$project.buildDir.path/js-tests/${project.name}-tests.js"
+        sourceMap = true
+        moduleKind = 'commonjs'
+        main = "call"
+    }
+
+}
+
+kotlinFrontend {
+    npm {
+        dependency("react","$react_version")
+        dependency("react-dom", "$react_version")
+
+    }
+    webpackBundle {
+        bundleName = "main"
+        sourceMapEnabled = true
+        contentPath = file("src/main/web")
+        publicPath = "/"
+        port = 7777
+    }
+}
